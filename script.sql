@@ -43,6 +43,9 @@ $$
 
 CALL sp_acha_maior(2, 3);
 
+-- DROP PROCEDURE IF EXISTS sp_acha_maior;
+CREATE OR REPLACE PROCEDURE sp_acha_maior
+
 
 
 
