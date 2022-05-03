@@ -101,7 +101,36 @@ $$
 SELECT * FROM tb_item;
 SELECT * FROM tb_pedido;
 CALL sp_adicionar_item_a_pedido(1, 1);
+CALL sp_adicionar_item_a_pedido(3, 1);
 SELECT * FROM tb_item_pedido;
+-------------------------------------------------------------------------------------
+-- calcular valor total de um pedido
+CREATE OR REPLACE PROCEDURE sp_calcular_valor_de_um_pedido (IN p_cod_pedido INT, OUT p_valor_total INT)
+LANGUAGE plpgsql
+AS $$
+BEGIN
+	SELECT SUM(valor) FROM
+	tb_pedido p
+	INNER JOIN tb_item_pedido ip ON
+	p.cod_pedido = ip.cod_pedido
+	INNER JOIN tb_item i ON
+	i.cod_item = ip.cod_item
+	WHERE p.cod_pedido = p_cod_pedido
+	INTO p_valor_total;
+END;
+$$
+
+DO $$
+DECLARE
+	valor_total INT;
+	cod_pedido INT := 1;
+BEGIN
+	CALL sp_calcular_valor_de_um_pedido(cod_pedido, valor_total);
+	RAISE NOTICE 'Total do pedido %: R$ %', cod_pedido, valor_total;
+END;
+$$
+
+
 
 
 
