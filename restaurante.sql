@@ -63,6 +63,29 @@ $$
 
 CALL sp_cadastrar_cliente ('Joáo da Silva');
 CALL sp_cadastrar_cliente ('Maria Santos');
+-------------------------------------------------------------------------------------
+-- criar um pedido, como se o cliente entrasse no restaurante e pegasse a comanda
+CREATE OR REPLACE PROCEDURE sp_criar_pedido(OUT cod_pedido INT, IN cod_cliente INT)
+LANGUAGE plpgsql
+AS $$
+BEGIN
+	INSERT INTO tb_pedido (cod_cliente) VALUES (cod_cliente);
+	SELECT LASTVAL() INTO cod_pedido;
+END;
+$$
+
+DO
+$$
+DECLARE
+	cod_cliente INT;
+	cod_pedido INT;
+BEGIN
+	--pega o código da pessoa cujo nome é Maria Santos
+	SELECT c.cod_cliente FROM tb_cliente c WHERE c.nome LIKE 'Maria Santos' INTO cod_cliente;
+	CALL sp_criar_pedido (cod_pedido, cod_cliente);
+	RAISE NOTICE 'Pedido de código % criado para o cliente %', cod_pedido, cod_cliente;
+END;
+$$
 
 
 
