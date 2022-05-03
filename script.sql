@@ -44,7 +44,29 @@ $$
 CALL sp_acha_maior(2, 3);
 
 -- DROP PROCEDURE IF EXISTS sp_acha_maior;
-CREATE OR REPLACE PROCEDURE sp_acha_maior
+CREATE OR REPLACE PROCEDURE sp_acha_maior (OUT resultado INT, IN valor1 INT, IN valor2 INT)
+LANGUAGE plpgsql
+AS $$
+BEGIN
+	CASE
+		WHEN valor1 > valor2 THEN
+			-- resultado := valor1;
+			$1 := valor1;
+		ELSE
+			resultado := valor2;
+	END CASE;
+END;
+$$
+
+DO
+$$
+DECLARE
+	resultado INT;
+BEGIN
+	CALL sp_acha_maior(resultado, 2, 3);
+	RAISE NOTICE '% é o maior', resultado;
+END;
+$$
 
 
 
