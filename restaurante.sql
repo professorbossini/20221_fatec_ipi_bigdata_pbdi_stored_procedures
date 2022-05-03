@@ -37,6 +37,16 @@ INSERT INTO tb_item (descricao, valor, cod_tipo) VALUES
 ('Hamburguer', 12, 2),
 ('Batata frita', 9, 2);
 
+CREATE TABLE IF NOT EXISTS tb_item_pedido(
+	--surrogate key
+	cod_item_pedido SERIAL PRIMARY KEY,
+	cod_item INT,
+	cod_pedido INT,
+	CONSTRAINT fk_item FOREIGN KEY (cod_item) REFERENCES tb_item(cod_item),
+	CONSTRAINT fk_pedido FOREIGN KEY (cod_pedido) REFERENCES tb_pedido(cod_pedido)
+	--(1, 4), (1, 4)
+);
+
 
 
 
