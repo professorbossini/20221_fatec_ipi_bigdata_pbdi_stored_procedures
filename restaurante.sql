@@ -86,6 +86,22 @@ BEGIN
 	RAISE NOTICE 'Pedido de código % criado para o cliente %', cod_pedido, cod_cliente;
 END;
 $$
+-------------------------------------------------------------------------------------
+-- adicionar um item a um pedido
+CREATE OR REPLACE PROCEDURE sp_adicionar_item_a_pedido(IN cod_item INT, IN cod_pedido INT)
+LANGUAGE plpgsql
+AS $$
+BEGIN
+	-- inserir um novo item ao pedido
+	INSERT INTO tb_item_pedido (cod_item, cod_pedido) VALUES (cod_item, cod_pedido);
+	-- atualizar a data de modificação do pedido
+	UPDATE tb_pedido p SET data_modificacao = CURRENT_TIMESTAMP WHERE p.cod_pedido = $2;
+END;
+$$
+SELECT * FROM tb_item;
+SELECT * FROM tb_pedido;
+CALL sp_adicionar_item_a_pedido(1, 1);
+SELECT * FROM tb_item_pedido;
 
 
 
