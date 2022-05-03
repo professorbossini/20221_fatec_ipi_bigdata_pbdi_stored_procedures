@@ -90,6 +90,26 @@ BEGIN
 END;
 $$
 
+CREATE OR REPLACE PROCEDURE sp_calcula_media (VARIADIC valores INT [])
+LANGUAGE plpgsql
+AS $$
+DECLARE
+	media NUMERIC (10, 2) := 0;
+	valor INT;
+BEGIN
+	FOREACH valor IN ARRAY valores LOOP
+		media := media + valor;
+	END LOOP;
+	RAISE NOTICE 'A média é %', media / array_length(valores, 1);
+END;
+$$
+
+CALL sp_calcula_media(1);
+CALL sp_calcula_media(1, 2);
+CALL sp_calcula_media(1, 2, 5, 6, 1, 8);
+-- não queremos essa versão
+-- CALL sp_calcula_media(ARRAY[1, 2, 3])
+
 
 
 
